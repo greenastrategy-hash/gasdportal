@@ -33,15 +33,45 @@ function initElements() {
     fallbackToggleBtn = document.getElementById("fallbackToggleBtn");
 }
 
-// Fetch Portal Links from GAS API with Fallback
+// ฟังก์ชันดึงข้อมูลผ่าน JSONP ข้ามปัญหา CORS
+function fetchJSONP(url, timeout = 7000) {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
+        const script = document.createElement('script');
+        
+        const timer = setTimeout(() => {
+            cleanup();
+            reject(new Error('JSONP request timed out'));
+        }, timeout);
+
+        function cleanup() {
+            if (window[callbackName]) delete window[callbackName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+            clearTimeout(timer);
+        }
+
+        window[callbackName] = function(data) {
+            cleanup();
+            resolve(data);
+        };
+
+        script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+        script.onerror = () => {
+            cleanup();
+            reject(new Error('JSONP load error'));
+        };
+
+        document.body.appendChild(script);
+    });
+}
+
+// อัปเดตฟังก์ชัน loadPortalData ให้เรียก fetchJSONP
 async function loadPortalData() {
     try {
-        const res = await fetch(API_URL);
-        if (!res.ok) throw new Error("Network response was not ok");
-        const data = await res.json();
+        const data = await fetchJSONP(API_URL);
         portalLinks = Array.isArray(data) && data.length > 0 ? data : DEFAULT_PORTAL_LINKS;
     } catch (err) {
-        console.warn("API Fetch Failed, falling back to default links:", err);
+        console.warn("API Fetch via JSONP Failed, falling back to default links:", err);
         portalLinks = DEFAULT_PORTAL_LINKS;
     }
     buildMenu();
