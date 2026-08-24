@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🍄 GASD Portal</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CDNs -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'media',
+            theme: {
+                extend: {
+                    colors: {
+                        mac: {
+                            red: "#ff5f57",
+                            redBorder: "#e0443e",
+                            yellow: "#febc2e",
+                            yellowBorder: "#d89f24",
+                            green: "#28c840",
+                            greenBorder: "#1aab29",
+                            toolbar: "#f6f6f6",
+                            toolbarBorder: "#d1d1d1"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-screen w-full overflow-hidden bg-slate-50 text-slate-800 dark:bg-gray-950 dark:text-gray-200 transition-colors duration-300">
+
+    <div id="appWindow" class="flex flex-col w-full h-full bg-white dark:bg-gray-900 overflow-hidden relative transition-colors duration-300">
+
+        <!-- Top Header / Toolbar -->
+        <header class="h-[52px] flex-shrink-0 bg-[#f6f6f6]/95 dark:bg-gray-800/95 backdrop-blur-xl border-b border-gray-300/80 dark:border-gray-700/80 flex items-center justify-between px-2 sm:px-4 select-none z-30 relative gap-1.5 sm:gap-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-colors duration-300" ondblclick="toggleFullScreen()">
+            
+            <div class="flex items-center justify-start gap-1.5 sm:gap-4 flex-shrink-0 h-full">
+                <!-- Mac Traffic Light Buttons -->
+                <div class="flex items-center gap-[6px] sm:gap-[8px] group/mac cursor-pointer" onclick="toggleFullScreen(); event.stopPropagation();" title="เต็มจอ / ออกจากเต็มจอ">
+                    <button class="w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-mac-red border border-mac-redBorder flex items-center justify-center focus:outline-none pointer-events-none">
+                        <i class="mac-fullscreen-icon ph ph-arrows-out-simple text-[7px] sm:text-[8px] text-black/60 opacity-0 group-hover/mac:opacity-100 font-bold"></i>
+                    </button>
+                    <button class="w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-mac-yellow border border-mac-yellowBorder flex items-center justify-center focus:outline-none pointer-events-none">
+                        <i class="mac-fullscreen-icon ph ph-arrows-out-simple text-[7px] sm:text-[8px] text-black/60 opacity-0 group-hover/mac:opacity-100 font-bold"></i>
+                    </button>
+                    <button class="w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-mac-green border border-mac-greenBorder flex items-center justify-center focus:outline-none pointer-events-none">
+                        <i class="mac-fullscreen-icon ph ph-arrows-out-simple text-[7px] sm:text-[8px] text-black/60 opacity-0 group-hover/mac:opacity-100 font-bold"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-0.5 sm:gap-1">
+                    <button id="menuBtn" class="flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700/60 w-[30px] h-[30px] rounded-[6px] transition-colors focus:outline-none" title="ซ่อน/แสดง เมนูระบบงาน (Ctrl+K)">
+                        <i class="ph ph-sidebar-simple text-[20px] leading-none"></i>
+                    </button>
+                    <button id="splitToggleBtn" onclick="toggleSplitMode()" class="flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700/60 w-[30px] h-[30px] rounded-[6px] transition-colors focus:outline-none" title="เปิด/ปิด แบ่งหน้าจอ">
+                        <i class="ph ph-columns text-[20px] leading-none"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Address Bar & Tools -->
+            <div class="flex-1 flex items-center justify-center min-w-0">
+                <div class="flex items-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-[0_1px_3px_rgba(0,0,0,0.04)] rounded-[6px] px-1 sm:px-2 py-[4px] w-full max-w-[650px] group min-w-0 relative transition-all duration-300" ondblclick="event.stopPropagation();">
+                    <div class="flex-1 flex items-center justify-center overflow-hidden gap-1 sm:gap-1.5 px-1 sm:px-2">
+                        <i class="ph-fill ph-lock-key text-gray-400 dark:text-gray-500 text-[11px] flex-shrink-0"></i>
+                        <span id="currentUrlDisplay" class="text-[10px] sm:text-[13px] text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap overflow-hidden safari-url-text text-center max-w-full">กำลังโหลด...</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
+                        <div class="hidden sm:flex items-center gap-0.5">
+                            <button onclick="changeZoom(-0.1)" class="text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-500 dark:hover:text-blue-400 dark:hover:bg-blue-900/40 p-1 rounded-md transition-all focus:outline-none flex-shrink-0" title="ย่อหน้าเว็บ"><i class="ph ph-magnifying-glass-minus text-[15px]"></i></button>
+                            <button onclick="changeZoom(0)" id="zoomLevelDisplay" class="text-[10px] text-gray-500 hover:text-blue-600 dark:text-gray-400 font-medium w-[32px] text-center cursor-pointer transition-colors" title="คืนค่าเดิม (100%)">100%</button>
+                            <button onclick="changeZoom(0.1)" class="text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-500 dark:hover:text-blue-400 dark:hover:bg-blue-900/40 p-1 rounded-md transition-all focus:outline-none flex-shrink-0" title="ขยายหน้าเว็บ"><i class="ph ph-magnifying-glass-plus text-[15px]"></i></button>
+                            <div class="w-px h-3 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                        </div>
+
+                        <button onclick="refreshIframe()" class="text-gray-400 hover:text-gray-800 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-gray-200 dark:hover:bg-gray-800 p-1 rounded-md transition-all focus:outline-none flex-shrink-0" title="โหลดหน้าเว็บใหม่"><i class="ph ph-arrow-clockwise text-[15px] sm:text-[16px]"></i></button>
+                        
+                        <button id="wakeLockBtn" onclick="toggleWakeLock()" class="text-gray-400 hover:text-amber-500 hover:bg-amber-50 dark:text-gray-500 dark:hover:text-amber-400 dark:hover:bg-amber-900/40 p-1 rounded-md transition-all focus:outline-none flex-shrink-0" title="เปิดหน้าจอค้างไว้ (Wake Lock)">
+                            <i id="wakeLockIcon" class="ph ph-lightbulb text-[15px] sm:text-[16px] transition-all"></i>
+                        </button>
+                        
+                        <button onclick="shareUrl()" class="text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:text-gray-500 dark:hover:text-emerald-400 dark:hover:bg-emerald-900/40 p-1 rounded-md transition-all focus:outline-none flex-shrink-0" title="คัดลอกลิงก์ย่อย"><i id="shareIcon" class="ph ph-export text-[15px] sm:text-[16px] transition-all"></i></button>
+                        
+                        <button onclick="copyEmbedCode()" class="text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:text-gray-500 dark:hover:text-indigo-400 dark:hover:bg-indigo-900/40 p-1 rounded-md transition-all focus:outline-none flex-shrink-0" title="คัดลอกโค้ด Embed iFrame สำหรับไปแปะเว็บอื่น"><i id="embedIcon" class="ph ph-code text-[15px] sm:text-[16px] transition-all"></i></button>
+
+                        <button id="fallbackToggleBtn" onclick="toggleFallbackUrl()" class="hidden text-gray-400 hover:text-orange-500 hover:bg-orange-50 dark:text-gray-500 dark:hover:text-orange-400 dark:hover:bg-orange-900/40 p-1 rounded-md transition-all focus:outline-none flex-shrink-0" title="สลับไปใช้ลิงก์สำรอง"><i id="fallbackToggleIcon" class="ph ph-arrows-left-right text-[15px] sm:text-[16px] transition-all"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date & Time Display -->
+            <div class="flex justify-end items-center text-gray-500 dark:text-gray-400 text-xs flex-shrink-0 w-auto min-w-[50px] sm:min-w-[150px] gap-2">
+                <div id="dateTimeContainer" class="flex gap-2">
+                    <div class="hidden lg:flex items-center gap-3 bg-gray-200/50 dark:bg-gray-700/50 px-3 py-1 rounded-[6px] border border-gray-200/60 dark:border-gray-600/60 shadow-sm transition-colors duration-300">
+                        <div class="flex items-center gap-1.5">
+                            <i class="ph ph-calendar-blank text-[14px]"></i>
+                            <span id="dateDisplay" class="whitespace-nowrap font-medium text-[11px]">--/--/----</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="ph ph-clock text-[14px]"></i>
+                            <span id="clockDisplay" class="whitespace-nowrap font-medium text-[11px]">--:--</span>
+                        </div>
+                    </div>
+                    <div class="flex lg:hidden items-center bg-gray-200/50 dark:bg-gray-700/50 px-2 py-1 rounded-[6px] border border-gray-200/60 dark:border-gray-600/60 transition-colors duration-300">
+                        <span id="clockDisplayMobile" class="font-medium text-[10px] sm:text-[11px]">--:--</span>
+                    </div>
+                </div>
+                <div id="titleContainer" class="hidden items-center bg-gray-200/50 dark:bg-gray-700/50 px-2 sm:px-3 py-1 rounded-[6px] border border-gray-200/60 dark:border-gray-600/60 shadow-sm transition-colors duration-300">
+                    <span id="titleContainerText" class="whitespace-nowrap font-medium text-[10px] sm:text-[11px]"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <div class="flex-1 flex overflow-hidden relative">
+            
+            <div id="menuOverlay" class="absolute inset-0 bg-black/10 dark:bg-black/40 z-40 hidden transition-opacity duration-300 opacity-0 backdrop-blur-sm" onclick="toggleMenu()"></div>
+
+            <!-- Sidebar Navigation -->
+            <aside id="sidebar" class="absolute top-0 left-0 z-50 w-[85vw] sm:w-[80vw] max-w-[19rem] h-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-2xl flex flex-col transition-transform duration-300 ease-in-out transform -translate-x-full border-r border-gray-200 dark:border-gray-700 shadow-[20px_0_30px_rgba(0,0,0,0.08)] dark:shadow-[20px_0_30px_rgba(0,0,0,0.4)]">
+                
+                <div class="p-3.5 flex justify-between items-center border-b border-gray-200/70 dark:border-gray-700/70">
+                    <span class="text-[13px] font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                        <i class="ph-fill ph-squares-four text-emerald-500 text-lg"></i> รายการระบบงาน
+                    </span>
+                    <button onclick="toggleMenu()" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-md p-1 transition-colors focus:outline-none">
+                        <i class="ph ph-x text-base"></i>
+                    </button>
+                </div>
+
+                <div class="px-3 pt-3 pb-1">
+                    <div class="relative flex items-center">
+                        <i class="ph ph-magnifying-glass absolute left-3 text-gray-400 text-sm"></i>
+                        <input type="text" id="searchInput" oninput="filterMenu()" placeholder="ค้นหาระบบงาน... (Ctrl+K)" 
+                               class="w-full pl-8 pr-7 py-1.5 bg-gray-100 dark:bg-gray-900/80 border border-gray-200/80 dark:border-gray-700 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+                        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                            <i class="ph ph-x-circle-fill text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <nav id="menuContainer" class="flex-1 overflow-y-auto ios-scroll-fix px-3 space-y-0.5 pb-4 mt-1"></nav>
+
+                <div class="p-3 mt-auto border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-md transition-colors duration-300 flex flex-col gap-1">
+                    <p class="text-[10px] text-gray-400 dark:text-gray-500 text-left leading-relaxed">🍄 GASD Portal &copy; 2026</p>
+                    <button onclick="copyEmbedCode()" class="text-[10px] text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 text-left flex items-center gap-1 font-medium transition-colors">
+                        <i class="ph ph-code text-xs"></i> คัดลอกโค้ดไปแปะเว็บอื่น (Embed)
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Display Panes -->
+            <main class="flex-1 bg-white dark:bg-gray-900 relative h-full flex flex-col md:flex-row min-w-0 transition-colors duration-300 p-1 md:p-1.5 gap-1 md:gap-1.5 bg-gray-100 dark:bg-gray-800">
+                
+                <!-- Pane 1 -->
+                <div id="pane1" class="flex-1 relative w-full h-full bg-[#fcfcfc] dark:bg-gray-950 shadow-sm transition-all duration-300 rounded-[10px] overflow-hidden border-2 border-emerald-500 active-pane-glow">
+                    <div id="paneOverlay1" class="absolute inset-0 z-20 hidden cursor-pointer bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 transition-colors" onclick="setActivePane(1)"></div>
+                    
+                    <div id="loadingIndicator1" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 dark:bg-gray-950/80 backdrop-blur-md z-10 transition-opacity duration-300">
+                        <i class="ph ph-spinner-gap text-[40px] text-emerald-500 dark:text-emerald-400 animate-spin mb-3"></i>
+                        <span class="text-[13px] text-gray-500 dark:text-gray-400 font-medium tracking-wide">กำลังเชื่อมต่อข้อมูล...</span>
+                        
+                        <div id="timeoutBox1" class="hidden mt-4 p-3 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 rounded-lg text-center max-w-[260px] animate-fade-in">
+                            <p class="text-xs text-amber-700 dark:text-amber-300 font-medium mb-2">หน้าเว็บใช้เวลาโหลดนานกว่าปกติ</p>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="refreshIframe()" class="px-2.5 py-1 text-[11px] bg-amber-500 text-white font-medium rounded hover:bg-amber-600 transition-colors">โหลดใหม่</button>
+                                <button id="timeoutFallbackBtn1" onclick="toggleFallbackUrl()" class="hidden px-2.5 py-1 text-[11px] bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium rounded hover:bg-gray-300 transition-colors">ใช้ลิงก์สำรอง</button>
+                            </div>
+                        </div>
+                    </div>
+                    <iframe id="contentIframe1" class="absolute inset-0 w-full h-full min-w-full border-0 opacity-0 transition-opacity duration-500 bg-transparent origin-top-left" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-modals allow-top-navigation-by-user-activation" allow="geolocation"></iframe>
+                </div>
+
+                <!-- Pane 2 -->
+                <div id="pane2" class="hidden flex-1 relative w-full h-full bg-[#fcfcfc] dark:bg-gray-950 shadow-sm transition-all duration-300 rounded-[10px] overflow-hidden border-2 border-transparent">
+                    <div id="paneOverlay2" class="absolute inset-0 z-20 cursor-pointer bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 transition-colors" onclick="setActivePane(2)"></div>
+
+                    <div id="loadingIndicator2" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 dark:bg-gray-950/80 backdrop-blur-md z-10 transition-opacity duration-300 hidden opacity-0">
+                        <i class="ph ph-spinner-gap text-[40px] text-emerald-500 dark:text-emerald-400 animate-spin mb-3"></i>
+                        <span class="text-[13px] text-gray-500 dark:text-gray-400 font-medium tracking-wide">กำลังเชื่อมต่อข้อมูล...</span>
+                        
+                        <div id="timeoutBox2" class="hidden mt-4 p-3 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 rounded-lg text-center max-w-[260px] animate-fade-in">
+                            <p class="text-xs text-amber-700 dark:text-amber-300 font-medium mb-2">หน้าเว็บใช้เวลาโหลดนานกว่าปกติ</p>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="refreshIframe()" class="px-2.5 py-1 text-[11px] bg-amber-500 text-white font-medium rounded hover:bg-amber-600 transition-colors">โหลดใหม่</button>
+                                <button id="timeoutFallbackBtn2" onclick="toggleFallbackUrl()" class="hidden px-2.5 py-1 text-[11px] bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium rounded hover:bg-gray-300 transition-colors">ใช้ลิงก์สำรอง</button>
+                            </div>
+                        </div>
+                    </div>
+                    <iframe id="contentIframe2" class="absolute inset-0 w-full h-full min-w-full border-0 opacity-0 transition-opacity duration-500 bg-transparent origin-top-left" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-modals allow-top-navigation-by-user-activation" allow="geolocation"></iframe>
+                    
+                    <div id="emptyState2" class="absolute inset-0 flex flex-col items-center justify-center p-6 bg-slate-50/50 dark:bg-gray-950/50 z-0 text-gray-500 dark:text-gray-400 overflow-y-auto">
+                        <div class="max-w-md w-full text-center">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3 shadow-sm">
+                                <i class="ph ph-columns text-2xl"></i>
+                            </div>
+                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">หน้าต่างที่ 2 (Split View)</h3>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mb-5">เลือกทางลัดด่วนด้านล่าง หรือเปิดเมนูเพื่อเลือกระบบงาน</p>
+                            
+                            <div id="quickDashboardGrid" class="grid grid-cols-2 gap-2 text-left"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
