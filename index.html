@@ -41,7 +41,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="h-screen w-full overflow-hidden bg-slate-50 text-slate-800 dark:bg-gray-950 dark:text-gray-200 transition-colors duration-300">
+<body class="h-[100dvh] w-full overflow-hidden bg-slate-50 text-slate-800 dark:bg-gray-950 dark:text-gray-200 transition-colors duration-300">
 
     <div id="appWindow" class="flex flex-col w-full h-full bg-white dark:bg-gray-900 overflow-hidden relative transition-colors duration-300">
 
@@ -132,7 +132,7 @@
             <div id="menuOverlay" class="absolute inset-0 bg-black/10 dark:bg-black/40 z-40 hidden transition-opacity duration-300 opacity-0 backdrop-blur-sm" onclick="toggleMenu()"></div>
 
             <!-- Sidebar Navigation -->
-            <aside id="sidebar" class="absolute top-0 left-0 z-50 w-[85vw] sm:w-[80vw] max-w-[19rem] h-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-2xl flex flex-col transition-transform duration-300 ease-in-out transform -translate-x-full border-r border-gray-200 dark:border-gray-700 shadow-[20px_0_30px_rgba(0,0,0,0.08)] dark:shadow-[20px_0_30px_rgba(0,0,0,0.4)]">
+            <aside id="sidebar" class="absolute top-0 left-0 z-50 w-[85vw] sm:w-[80vw] max-w-[19rem] h-[100dvh] bg-white/95 dark:bg-gray-800/95 backdrop-blur-2xl flex flex-col transition-transform duration-300 ease-in-out transform -translate-x-full border-r border-gray-200 dark:border-gray-700 shadow-[20px_0_30px_rgba(0,0,0,0.08)] dark:shadow-[20px_0_30px_rgba(0,0,0,0.4)]">
                 
                 <div class="p-3.5 flex justify-between items-center border-b border-gray-200/70 dark:border-gray-700/70">
                     <span class="text-[13px] font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
@@ -156,7 +156,7 @@
 
                 <nav id="menuContainer" class="flex-1 overflow-y-auto ios-scroll-fix px-3 space-y-0.5 pb-4 mt-1"></nav>
 
-                <div class="p-3 mt-auto border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-md transition-colors duration-300 flex flex-col gap-1">
+                <div class="p-3 mt-auto border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-md transition-colors duration-300 flex flex-col gap-1 mobile-safe-bottom pb-4">
                     <p class="text-[10px] text-gray-400 dark:text-gray-500 text-left leading-relaxed">🍄 GASD Portal &copy; 2026</p>
                     <button onclick="copyEmbedCode()" class="text-[10px] text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 text-left flex items-center gap-1 font-medium transition-colors">
                         <i class="ph ph-code text-xs"></i> คัดลอกโค้ดไปแปะเว็บอื่น (Embed)
@@ -165,7 +165,7 @@
             </aside>
 
             <!-- Main Display Panes -->
-            <main class="flex-1 bg-white dark:bg-gray-900 relative h-full flex flex-col md:flex-row min-w-0 transition-colors duration-300 p-1 md:p-1.5 gap-1 md:gap-1.5 bg-gray-100 dark:bg-gray-800">
+            <main class="flex-1 bg-white dark:bg-gray-900 relative h-full flex flex-col md:flex-row min-w-0 transition-colors duration-300 p-1 md:p-1.5 gap-1 md:gap-1.5 bg-gray-100 dark:bg-gray-800 mobile-safe-bottom">
                 
                 <!-- Pane 1 -->
                 <div id="pane1" class="flex-1 relative w-full h-full bg-[#fcfcfc] dark:bg-gray-950 shadow-sm transition-all duration-300 rounded-[10px] overflow-hidden border-2 border-emerald-500 active-pane-glow">
@@ -183,7 +183,7 @@
                             </div>
                         </div>
                     </div>
-                    <iframe id="contentIframe1" class="absolute inset-0 w-full h-full min-w-full border-0 opacity-0 transition-opacity duration-500 bg-transparent origin-top-left" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-modals allow-top-navigation-by-user-activation" allow="geolocation"></iframe>
+                    <iframe id="contentIframe1" class="absolute inset-0 w-full h-full min-w-full border-0 opacity-0 transition-opacity duration-500 bg-transparent origin-top-left" allow="geolocation; fullscreen; clock; clipboard-write"></iframe>
                 </div>
 
                 <!-- Pane 2 -->
@@ -202,7 +202,7 @@
                             </div>
                         </div>
                     </div>
-                    <iframe id="contentIframe2" class="absolute inset-0 w-full h-full min-w-full border-0 opacity-0 transition-opacity duration-500 bg-transparent origin-top-left" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-modals allow-top-navigation-by-user-activation" allow="geolocation"></iframe>
+                    <iframe id="contentIframe2" class="absolute inset-0 w-full h-full min-w-full border-0 opacity-0 transition-opacity duration-500 bg-transparent origin-top-left" allow="geolocation; fullscreen; clock; clipboard-write"></iframe>
                     
                     <div id="emptyState2" class="absolute inset-0 flex flex-col items-center justify-center p-6 bg-slate-50/50 dark:bg-gray-950/50 z-0 text-gray-500 dark:text-gray-400 overflow-y-auto">
                         <div class="max-w-md w-full text-center">
