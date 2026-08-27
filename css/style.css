@@ -11,6 +11,14 @@ iframe {
 body {
     font-family: "Kanit", sans-serif;
     -webkit-font-smoothing: antialiased;
+    /* รองรับ Dynamic Viewport Height สำหรับเบราว์เซอร์มือถือ */
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+/* รองรับ Safe Area สำหรับมือถือที่มีขอบโค้ง / แถบ Home Indicator (iOS & Android) */
+.mobile-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .ios-scroll-fix { 
@@ -64,20 +72,32 @@ body {
 }
 
 /* ==========================================
-   4. Mac Style Custom Cursor & Interactions
+   4. Responsive Device Cursor Interaction
    ========================================== */
-body, button, a, input, select {
-    cursor: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 2L9.5 19.5L13.2 13.2L19.5 9.5L2 2Z' fill='white' stroke='black' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+/* ให้แสดง Custom Cursor เฉพาะอุปกรณ์ที่ใช้ Mouse/Trackpad เท่านั้น */
+@media (pointer: fine) {
+    body, input, select {
+        cursor: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 2L9.5 19.5L13.2 13.2L19.5 9.5L2 2Z' fill='white' stroke='black' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+    }
+
+    button, a, [role="button"], .cursor-pointer {
+        cursor: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 2V12.5C7 13.3 6.3 14 5.5 14C4.7 14 4 13.3 4 12.5V8.5C4 8.2 3.8 8 3.5 8C3.2 8 3 8.2 3 8.5V13.5C3 17 6 20 9.5 20H12.5C16 20 18.5 17.5 18.5 14V10.5C18.5 9.7 17.8 9 17 9C16.5 9 16.1 9.3 15.8 9.7C15.5 9.3 15 9 14.5 9C14 9 13.6 9.2 13.3 9.6C13 9.2 12.5 9 12 9C11.2 9 10.5 9.7 10.5 10.5V12C10.5 12 10.5 2 7 2Z' fill='white' stroke='black' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E"), pointer !important;
+    }
 }
 
-button:hover, a:hover, [role="button"]:hover, .cursor-pointer:hover {
-    cursor: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 2V12.5C7 13.3 6.3 14 5.5 14C4.7 14 4 13.3 4 12.5V8.5C4 8.2 3.8 8 3.5 8C3.2 8 3 8.5V13.5C3 17 6 20 9.5 20H12.5C16 20 18.5 17.5 18.5 14V10.5C18.5 9.7 17.8 9 17 9C16.5 9 16.1 9.3 15.8 9.7C15.5 9.3 15 9 14.5 9C14 9 13.6 9.2 13.3 9.6C13 9.2 12.5 9 12 9C11.2 9 10.5 9.7 10.5 10.5V12C10.5 12 10.5 2 7 2Z' fill='white' stroke='black' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E"), pointer !important;
+/* คืนค่า Touch Behavior และขนาดสัมผัสสำหรับ Touch Screen */
+@media (pointer: coarse) {
+    body, button, a, input, select, [role="button"], .cursor-pointer {
+        cursor: auto !important;
+        -webkit-tap-highlight-color: transparent;
+    }
 }
 
+/* Hover & Active Effects */
 button, a, .cursor-pointer {
     transition: transform 0.15s cubic-bezier(0.2, 0, 0.13, 1.5), background-color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 button:active, a:active {
-    transform: scale(0.94) !important;
+    transform: scale(0.95) !important;
 }
